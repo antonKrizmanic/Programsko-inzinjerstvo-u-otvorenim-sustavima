@@ -129,10 +129,12 @@ class UserController extends Controller
     {
         $numberOfDelete=User::destroy($id);
         if($numberOfDelete==1){
-            return 'Ok';
+            $message = ["status" => "success", "message" => "Ok"];
+            return $message;
         }
         else{
-            return "Ili si ga vec obrisao ili si pretjerao s brojem :)";
+            $message = ["status" => "failed", "message" => "something went wrong"];
+            return $message;
         }
 
     }
