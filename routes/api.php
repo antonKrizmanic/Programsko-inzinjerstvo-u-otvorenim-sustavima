@@ -20,3 +20,7 @@ Route::get('users','UserController@index');
 Route::post('user','UserController@store');
 Route::delete('user/{id}','UserController@destroy');
 Route::post('login','UserController@login');
+
+Route::get('events','EventController@index');
+Route::get('event/{id}','EventController@show');
+Route::post('event','EventController@store');
