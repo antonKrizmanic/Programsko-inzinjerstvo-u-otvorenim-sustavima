@@ -10,7 +10,7 @@ use App\Event;
 class EventController extends Controller
 {
     public function index(){
-        $events = DB::table('events')->select('title','short_description','user_id')->get();
+        $events = DB::table('events')->select('id','title','short_description','user_id')->get();
 
         foreach($events as $event ){
             $event->user_email=User::getEmail($event->user_id);            ;
