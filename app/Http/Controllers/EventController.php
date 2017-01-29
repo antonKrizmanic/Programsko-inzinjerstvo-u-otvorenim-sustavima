@@ -15,7 +15,6 @@ class EventController extends Controller
         foreach($events as $event ){
             $event->user_email=User::getEmail($event->user_id);            ;
         }
-
         return $events;
     }
     public function show($id){
