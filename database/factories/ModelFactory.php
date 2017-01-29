@@ -27,6 +27,8 @@ $factory->define(App\Event::class, function(Faker\Generator $faker){
         'title' => $faker->sentence($nbWords = 4, $variableNbWords = true),
         'short_description' => $faker->realText($maxNbChars=50, $indexSize=2),
         'long_description' => $faker->realText($maxNbChars=100, $indexSize=2),
-        'user_id' => $faker->numberBetween($min=1, $max=51),
+        'user_id' => function () {
+            return factory(App\User::class)->create()->id;
+        }
     ];
 });
