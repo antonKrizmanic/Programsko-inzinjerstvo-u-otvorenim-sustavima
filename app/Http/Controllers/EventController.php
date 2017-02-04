@@ -4,40 +4,75 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Response;
 use App\User;
 use App\Event;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
     public function index(){
-        $events = DB::table('events')->select('id','title','short_description','user_id')->get();
+        $events = DB::table('events')->select('id','title','short_description','photo','user_id')->get();
 
         foreach($events as $event ){
-            $event->user_email=User::getEmail($event->user_id);            ;
+            $event->user_email=User::getEmail($event->user_id);                        
         }
         return $events;
     }
+
     public function show($id){
         $event = Event::find($id);
-        $event['user_mail']=User::getEmail($event['user_id']);
+        $event['user_mail'] = User::getEmail($event['user_id']);
         return $event;
     }
 
     public function store(Request $request){
-        $userId=User::getId($request['user_email']);
+        $userId = User::getId($request['user_email']);        
+        
         $event = Event::create([
             'title' => $request['title'],
             'short_description' => $request['short_description'],
-            'long_description' => $request['long_description'],
+            'long_description' => $request['long_description'],            
             'user_id'=>$userId,
         ]);
+
         if ($event->save()) {
-            $message = ["status" => "success", "message" => "Ok"];
-            return $message;
+               //if event is created find that event and attach photo with name in format "id-yyyy-mm-dd.jpg" and return JSON object from thah function
+               return $this->storePhoto($event->id, $request);     
         }
         else{
-            $message = ["status"=>"failed","message"=>"something went wrong"];
-            return $message;
+            return $this->message("failed","something went wrong");
         }
     }
+
+    public function getPhoto($fileName)
+    {
+        if (file_exists(storage_path('app/'.$fileName))) {
+            $path = storage_path('app/'.$fileName);            
+            return Response::download($path);
+        }        
+        else{
+            return $this->message("failed","There is no photo with this file name");
+        }        
+    }
+    
+    public function storePhoto($id, $request)
+    {        
+        $event = Event::find($id);
+        if($request->hasFile('photo')){                                
+            $path = $request->file('photo')->storeAs('',$event->id.'-'.$event->created_at->toDateString().'.jpg');
+        }
+        else{
+            $path = "";
+        }
+        $event->photo = $path;
+        
+        if($event->save()){
+            return $this->message("success","Ok");
+        }
+        else{
+            return $this->message("success","Event is created but photo isn't saved");
+        }    
+    }
+    
 }

@@ -48,18 +48,15 @@ class UserController extends Controller
                 'email' => $request['email'],
                 'password' => bcrypt($request['password']),
             ]);
-            if ($user->save()) {
-                $message = ["status" => "success", "message" => "Ok"];
-                return $message;
+            if ($user->save()) {                
+                return $this->message("success","Ok");
             }
             else{
-                $message = ["status"=>"failed","message"=>"something went wrong"];
-                return $message;
+                return $this->message("failed","something went wrong");
             }
         }
         else{
-            $message = ["status"=>"failed","message"=>"this email is already in use"];
-            return $message;
+            return $this->message("failed","this email is already in use");
         }
     }
 
@@ -68,20 +65,17 @@ class UserController extends Controller
         $password = $request['password'];
         $user = User::where('email','=',$mail)->first();
         if($user) {
-            if (Hash::check($password, $user['password'])) {
-                $message = ["status" => "success", "message" => $user['name']];
-                return $message;
+            if (Hash::check($password, $user['password'])) {                
+                return $this->message("success",$user['name']);
             }
             /*wrong password*/
-            else{
-                $message = ['status'=>'failed', 'message'=>'invalid user credentials'];
-                return $message;
+            else{                
+                return $this->message("failed","invalid user credentials");
             }
         }
         /*wrong mail*/
-        else{
-            $message = ['status'=>'failed', 'message'=>'invalid user credentials'];
-            return $message;
+        else{            
+            return $this->message("failed","invalid user credentials");
         }
     }
 
@@ -128,14 +122,11 @@ class UserController extends Controller
     public function destroy($id)
     {
         $numberOfDelete=User::destroy($id);
-        if($numberOfDelete==1){
-            $message = ["status" => "success", "message" => "Ok"];
-            return $message;
+        if($numberOfDelete==1){            
+            return $this->message("success","Ok");
         }
-        else{
-            $message = ["status" => "failed", "message" => "something went wrong"];
-            return $message;
+        else{            
+            return $this->message("failed","something went wrong");
         }
-
     }
 }

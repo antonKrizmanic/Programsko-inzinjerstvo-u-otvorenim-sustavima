@@ -10,5 +10,5 @@ class Event extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
-    protected $fillable = ['title', 'short_description', 'long_description','user_id'];
+    protected $fillable = ['title', 'short_description', 'long_description','photo','user_id'];
 }
