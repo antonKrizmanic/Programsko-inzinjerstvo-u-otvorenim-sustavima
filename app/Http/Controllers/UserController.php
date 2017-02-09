@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
@@ -40,24 +42,31 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $mail = $request['email'];
-        $user = User::where('email',$mail)->first();
-        if(! $user) {
-            $user = User::create([
-                'name' => $request['name'],
-                'email' => $request['email'],
-                'password' => bcrypt($request['password']),
-            ]);
-            if ($user->save()) {                
-                return $this->message("success","Ok");
-            }
-            else{
-                return $this->message("failed","something went wrong");
-            }
+        $validated=$this->validateUser($request); 
+        
+        if($validated != 1){
+            return $validated;
         }
         else{
-            return $this->message("failed","this email is already in use");
-        }
+            $mail = $request['email'];
+            $user = User::where('email',$mail)->first();
+            if(! $user) {
+                $user = User::create([
+                    'name' => $request['name'],
+                    'email' => $request['email'],
+                    'password' => bcrypt($request['password']),
+                ]);
+                if ($user->save()) {                
+                    return $this->message("success","Ok");
+                }
+                else{
+                    return $this->message("failed","something went wrong");
+                }
+            }
+            else{
+                return $this->message("failed","this email is already in use");
+            }
+        }       
     }
 
     public function login(Request $request){
@@ -128,5 +137,33 @@ class UserController extends Controller
         else{            
             return $this->message("failed","something went wrong");
         }
+    }
+    
+    public function validateUser($request){
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|max:60',        
+        ]);
+        if ($validator->fails()) {
+            return $this->message("failed","email is required");
+        }
+
+        $validator = Validator::make($request->all(), [        
+            'name' => 'required',        
+        ]);        
+        if ($validator->fails()) {
+            return $this->message("failed","name is required");
+        }
+
+        $validator = Validator::make($request->all(),
+        [
+            'password'=>'required',
+        ]);
+        if ($validator->fails()) {
+            return $this->message("failed","password is required");
+        }
+        
+        return 1;
+        
+
     }
 }

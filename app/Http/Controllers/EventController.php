@@ -20,6 +20,17 @@ class EventController extends Controller
         return $events;
     }
 
+    public function webIndex()
+    {
+        $events = DB::table('events')->select('id','title','short_description','photo','user_id')->get();
+
+        foreach($events as $event ){
+            $event->user_email=User::getEmail($event->user_id);                        
+        }
+        
+        return view('events.index',compact('events'));
+    }
+
     public function show($id){
         $event = Event::find($id);
         $event['user_mail'] = User::getEmail($event['user_id']);
