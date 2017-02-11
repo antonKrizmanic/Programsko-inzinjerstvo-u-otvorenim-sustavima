@@ -17,6 +17,7 @@ class EventController extends Controller
         foreach($events as $event ){
             $event->user_email=User::getEmail($event->user_id);                        
         }
+
         return $events;
     }
 
@@ -49,7 +50,7 @@ class EventController extends Controller
 
         if ($event->save()) {
                //if event is created find that event and attach photo with name in format "id-yyyy-mm-dd.jpg" and return JSON object from thah function
-               return $this->storePhoto($event->id, $request);     
+               return $this->storePhoto($event->id, $request);
         }
         else{
             return $this->message("failed","something went wrong");
@@ -68,10 +69,13 @@ class EventController extends Controller
     }
     
     public function storePhoto($id, $request)
-    {        
+    {
+
         $event = Event::find($id);
-        if($request->hasFile('photo')){                                
+        if($request->hasFile('photo')){
             $path = $request->file('photo')->storeAs('',$event->id.'-'.$event->created_at->toDateString().'.jpg');
+            $path = $request->fullUrl().'Photo/'.$path;
+
         }
         else{
             $path = "";
