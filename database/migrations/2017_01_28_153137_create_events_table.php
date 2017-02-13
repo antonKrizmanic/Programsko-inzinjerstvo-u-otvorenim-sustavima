@@ -18,7 +18,7 @@ class CreateEventsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('title');
             $table->string('short_description');
-            $table->string('long_description');
+            $table->text('long_description');
             $table->timestamps();
 
             
