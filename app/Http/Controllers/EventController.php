@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Response;
 use App\User;
 use App\Event;
+use File;
 use Carbon\Carbon;
 
 class EventController extends Controller
@@ -40,7 +41,7 @@ class EventController extends Controller
 
     public function store(Request $request){
         $userId = User::getId($request['user_email']);        
-        
+
         $event = Event::create([
             'title' => $request['title'],
             'short_description' => $request['short_description'],
@@ -59,13 +60,27 @@ class EventController extends Controller
 
     public function getPhoto($fileName)
     {
-        if (file_exists(storage_path('app/'.$fileName))) {
+        /*if (file_exists(storage_path('app/'.$fileName))) {
             $path = storage_path('app/'.$fileName);            
             return Response::download($path);
         }        
         else{
             return $this->message("failed","There is no photo with this file name");
-        }        
+        } */
+        $path = storage_path() . '/app/' . $fileName;
+        if(!File::exists($path)) {
+            return $this->message("failed","There is no photo with this file name");
+        }
+        else{
+            $file = File::get($path);
+            $type = File::mimeType($path);
+
+            $response = Response::make($file, 200);
+            $response->header("Content-Type", $type);
+
+            return $response;
+        }
+
     }
     
     public function storePhoto($id, $request)
@@ -75,13 +90,11 @@ class EventController extends Controller
         if($request->hasFile('photo')){
             $path = $request->file('photo')->storeAs('',$event->id.'-'.$event->created_at->toDateString().'.jpg');
             $path = $request->fullUrl().'Photo/'.$path;
-
         }
         else{
             $path = "";
         }
         $event->photo = $path;
-        
         if($event->save()){
             return $this->message("success","Ok");
         }
