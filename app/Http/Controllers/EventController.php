@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Response;
 use App\User;
@@ -94,8 +96,8 @@ class EventController extends Controller
 
         $event = Event::find($id);
         if ($request->hasFile('photo')) {
-            $path = $request->file('photo')->storeAs('', $event->id . '-' . $event->created_at->toDateString() . '.jpg');
-            $path = $request->fullUrl() . 'Photo/' . $path;
+            $filename = $request->file('photo')->store('/event','s3');
+            $path = Storage::cloud()->url($filename);
         } else {
             $path = "";
         }
