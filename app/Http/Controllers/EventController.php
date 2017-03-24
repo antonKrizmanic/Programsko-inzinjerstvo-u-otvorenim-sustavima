@@ -26,17 +26,6 @@ class EventController extends Controller
         return $events;
     }
 
-    public function webIndex()
-    {
-        $events = DB::table('events')->select('id', 'title', 'short_description', 'photo', 'user_id')->get();
-
-        foreach ($events as $event) {
-            $event->user_email = User::getEmail($event->user_id);
-        }
-
-        return view('events.index', compact('events'));
-    }
-
     public function show($id)
     {
         $event = Event::find($id);
@@ -65,30 +54,6 @@ class EventController extends Controller
                 return $this->message("failed", "something went wrong");
             }
         }
-    }
-
-    public function getPhoto($fileName)
-    {
-        /*if (file_exists(storage_path('app/'.$fileName))) {
-            $path = storage_path('app/'.$fileName);            
-            return Response::download($path);
-        }        
-        else{
-            return $this->message("failed","There is no photo with this file name");
-        } */
-        $path = storage_path() . '/app/' . $fileName;
-        if (!File::exists($path)) {
-            return $this->message("failed", "There is no photo with this file name");
-        } else {
-            $file = File::get($path);
-            $type = File::mimeType($path);
-
-            $response = Response::make($file, 200);
-            $response->header("Content-Type", $type);
-
-            return $response;
-        }
-
     }
 
     public function storePhoto($id, $request)

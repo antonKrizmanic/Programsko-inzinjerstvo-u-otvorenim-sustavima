@@ -24,4 +24,3 @@ Route::post('login','UserController@login');
 Route::get('events','EventController@index');
 Route::get('event/{id}','EventController@show');
 Route::post('event','EventController@store');
-Route::get('eventPhoto/{fileName}','EventController@getPhoto');
