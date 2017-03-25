@@ -38,4 +38,10 @@ class User extends Authenticatable
         $user = User::where('email',$mail)->first();
         return $user['id'];
     }
+
+    public function interests()
+    {
+        return $this->belongsToMany('App\Event','interests','user_id','event_id');
+    }
+
 }

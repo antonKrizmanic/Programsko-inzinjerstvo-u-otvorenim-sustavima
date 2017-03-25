@@ -74,8 +74,8 @@ class UserController extends Controller
         $password = $request['password'];
         $user = User::where('email','=',$mail)->first();
         if($user) {
-            if (Hash::check($password, $user['password'])) {                
-                return $this->message("success",$user['name']);
+            if (Hash::check($password, $user['password'])) {
+                return $user;
             }
             /*wrong password*/
             else{                
@@ -136,6 +136,18 @@ class UserController extends Controller
         }
         else{            
             return $this->message("failed","something went wrong");
+        }
+    }
+
+    public function promote($id)
+    {
+        $user = User::find($id);
+        $user->role="Admin";
+        if($user->save()){
+            return $this->message("Success","Ok");
+        }
+        else{
+            return $this->message("Failed","Something went wrong");
         }
     }
     

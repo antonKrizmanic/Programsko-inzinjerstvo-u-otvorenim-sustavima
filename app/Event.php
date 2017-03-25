@@ -11,4 +11,9 @@ class Event extends Model
 
     protected $dates = ['deleted_at'];
     protected $fillable = ['title', 'short_description', 'long_description','photo','user_id'];
+
+    public function interested()
+    {
+        return $this->belongsToMany('App\User','interests','event_id','user_id');
+    }
 }

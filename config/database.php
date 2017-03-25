@@ -1,10 +1,10 @@
 <?php
-$url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+/*$url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 
 $host = $url["host"];
 $username = $url["user"];
 $password = $url["pass"];
-$database = substr($url["path"], 1);
+$database = substr($url["path"], 1);*/
 return [
 
     /*
@@ -57,30 +57,30 @@ return [
             'prefix' => '',
         ],
         //locally
-//        'mysql' => [
-//            'driver' => 'mysql',
-//            'host' => env('DB_HOST', '127.0.0.1'),
-//            'port' => env('DB_PORT', '3306'),
-//            'database' => env('DB_DATABASE', 'forge'),
-//            'username' => env('DB_USERNAME', 'forge'),
-//            'password' => env('DB_PASSWORD', ''),
-//            'charset' => 'utf8',
-//            'collation' => 'utf8_unicode_ci',
-//            'prefix' => '',
-//            'strict' => true,
-//            'engine' => null,
-//        ],
-        //heroku
         'mysql' => [
-            'driver'    => 'mysql',
-            'host'      => $host,
-            'database'  => $database,
-            'username'  => $username,
-            'password'  => $password,
-            'charset'   => 'utf8',
+            'driver' => 'mysql',
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
         ],
+        //heroku
+//        'mysql' => [
+//            'driver'    => 'mysql',
+//            'host'      => $host,
+//            'database'  => $database,
+//            'username'  => $username,
+//            'password'  => $password,
+//            'charset'   => 'utf8',
+//            'collation' => 'utf8_unicode_ci',
+//            'prefix'    => '',
+//        ],
 
         'pgsql' => [
             'driver' => 'pgsql',
