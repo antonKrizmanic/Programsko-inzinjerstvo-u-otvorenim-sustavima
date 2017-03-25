@@ -19,7 +19,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        //$users=User::all();
         $users = DB::table('users')->select('id','name', 'email as user_email')->get();
         return $users;
     }
