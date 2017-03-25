@@ -124,7 +124,7 @@ class EventController extends Controller
             $path = $event->photo;
         }
         else if($request['photo'] != null || $request['photo'] != ""){
-            $path = "Nesto";
+            $path = $request['photo'];
         }
         else {
             $path = "prazno";
