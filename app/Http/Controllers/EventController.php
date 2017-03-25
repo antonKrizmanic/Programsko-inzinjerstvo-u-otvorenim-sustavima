@@ -32,6 +32,7 @@ class EventController extends Controller
     {
         $event = Event::find($id);
         $event['user_mail'] = User::getEmail($event['user_id']);
+        dd($event->interested);
         return $event;
     }
 

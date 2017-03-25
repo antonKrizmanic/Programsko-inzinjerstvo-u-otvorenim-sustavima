@@ -1,10 +1,6 @@
 <?php
 $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 
-$host = $url["host"];
-$username = $url["user"];
-$password = $url["pass"];
-$database = substr($url["path"], 1);
 return [
 
     /*
@@ -73,10 +69,10 @@ return [
         //heroku
         'heroku' => [
             'driver'    => 'mysql',
-            'host'      => $host,
-            'database'  => $database,
-            'username'  => $username,
-            'password'  => $password,
+            'host'      => $url["host"],
+            'database'  => substr($url["path"], 1),
+            'username'  => $url["user"],
+            'password'  => $url["pass"],
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
