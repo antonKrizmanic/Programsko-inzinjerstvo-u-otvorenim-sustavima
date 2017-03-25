@@ -123,11 +123,8 @@ class EventController extends Controller
         else if($event->photo != ""){
             $path = $event->photo;
         }
-        else if($request['photo'] != null || $request['photo'] != ""){
-            $path = $request['photo'];
-        }
         else {
-            $path = "prazno";
+            $path = "";
         }
         $event->photo = $path;
         if ($event->save()) {
