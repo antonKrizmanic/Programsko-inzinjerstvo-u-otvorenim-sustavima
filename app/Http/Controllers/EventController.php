@@ -60,46 +60,56 @@ class EventController extends Controller
 
     public function update(Request $request, $id)
     {
-        $event = Event::find($id);
-        $userId = User::getId($request['user_email']);
-        if($event->user_id != $userId){
-            return $this->message("failed", "You can not edit this event");
-        }
-        $validated = $this->validateEvent($request);
+        try{
+            $event = Event::find($id);
+            $userId = User::getId($request['user_email']);
+            if($event->user_id != $userId){
+                return $this->message("failed", "You can not edit this event");
+            }
+            $validated = $this->validateEvent($request);
 
-        if ($validated != 1) {
-            return $validated;
-        } else {
-
-
-            $event->title = $request['title'];
-            $event->short_description = $request['short_description'];
-            $event->long_description = $request['long_description'];
-
-            if ($event->save()) {
-                return $this->storePhoto($event->id, $request);
+            if ($validated != 1) {
+                return $validated;
             } else {
-                return $this->message("failed", "something went wrong");
+                $event->title = $request['title'];
+                $event->short_description = $request['short_description'];
+                $event->long_description = $request['long_description'];
+
+                if ($event->save()) {
+                    return $this->storePhoto($event->id, $request);
+                } else {
+                    return $this->message("failed", "something went wrong");
+                }
             }
         }
+        catch(\Exception $e){
+            return $this->message("failed", "something went wrong");
+        }
+
     }
 
     public function destroy($id, $userMail)
     {
-        $userId = User::getId($userMail);
-        $event = Event::find($id);
-        if($event->user_id == $userId){
-            $numberOfDelete=Event::destroy($id);
-            if($numberOfDelete==1){
-                return $this->message("success","Ok");
+        try{
+            $userId = User::getId($userMail);
+            $event = Event::find($id);
+            if($event->user_id == $userId){
+                $numberOfDelete=Event::destroy($id);
+                if($numberOfDelete==1){
+                    return $this->message("success","Ok");
+                }
+                else{
+                    return $this->message("failed","Something went wrong");
+                }
             }
             else{
-                return $this->message("failed","Something went wrong");
+                return $this->message("failed","You are not author of this event!");
             }
         }
-        else{
-            return $this->message("failed","You are not author of this event!");
+        catch (\Exception $e){
+            return $this->message("failed","Something went wrong");
         }
+
 
     }
 
@@ -113,8 +123,11 @@ class EventController extends Controller
         else if($event->photo != ""){
             $path = $event->photo;
         }
+        else if($request['photo'] != null || $request['photo'] != ""){
+            $path = "Nesto";
+        }
         else {
-            $path = "";
+            $path = "prazno";
         }
         $event->photo = $path;
         if ($event->save()) {
