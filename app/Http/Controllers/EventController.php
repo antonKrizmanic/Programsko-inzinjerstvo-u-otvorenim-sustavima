@@ -31,7 +31,6 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::find($id);
-        //$event = Event::with('interested')->where('id','=',$id)->first();
         $event['user_mail'] = User::getEmail($event['user_id']);
         return $event;
     }
@@ -114,11 +113,8 @@ class EventController extends Controller
         else if($event->photo != ""){
             $path = $event->photo;
         }
-        else if($request['photo'])        {
-            $path = $request['photo'];
-        }
-        else{
-            $path = $request['photo'];
+        else {
+            $path = "";
         }
         $event->photo = $path;
         if ($event->save()) {
