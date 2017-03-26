@@ -14,8 +14,8 @@ class UpdateEventsDate extends Migration
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->dateTime('date_and_time_start')->default(\Carbon\Carbon::now()->addDays(15));
-            $table->dateTime('date_and_time_end')->default(\Carbon\Carbon::now()->addDays(16));
+            $table->dateTime('date_and_time_start')->nullable()->default(\Carbon\Carbon::now()->addDays(15));
+            $table->dateTime('date_and_time_end')->nullable()->default(\Carbon\Carbon::now()->addDays(16));
         });
     }
 
@@ -27,7 +27,8 @@ class UpdateEventsDate extends Migration
     public function down()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->dropColumn('date_and_time');
+            $table->dropColumn('date_and_time_start');
+            $table->dropColumn('date_and_time_end');
         });
     }
 }

@@ -26,7 +26,7 @@ class EventsGradesUpdate extends Migration
     public function down()
     {
         Schema::table('events', function (Blueprint $table) {
-            //
+            $table->dropColumn('grade');
         });
     }
 }
