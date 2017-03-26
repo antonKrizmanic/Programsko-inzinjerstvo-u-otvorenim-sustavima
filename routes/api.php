@@ -32,3 +32,5 @@ Route::delete('event/{id}/{userMail}','EventController@destroy');
 
 Route::post('comment','CommentController@store');
 Route::get('comment/{eventId}','CommentController@index');
+
+Route::post('grade','GradeController@store');
