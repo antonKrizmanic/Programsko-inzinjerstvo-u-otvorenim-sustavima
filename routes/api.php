@@ -29,3 +29,6 @@ Route::get('event/{id}','EventController@show');
 Route::post('event','EventController@store');
 Route::post('event/{id}','EventController@update');
 Route::delete('event/{id}/{userMail}','EventController@destroy');
+
+Route::post('comment','CommentController@store');
+Route::get('comment/{eventId}','CommentController@index');

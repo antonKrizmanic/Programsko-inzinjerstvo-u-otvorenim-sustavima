@@ -16,4 +16,9 @@ class Event extends Model
     {
         return $this->belongsToMany('App\User','interests','event_id','user_id');
     }
+
+    public function comments()
+    {
+        return $this->belongsToMany('App\User','comments','event_id','user_id');
+    }
 }
