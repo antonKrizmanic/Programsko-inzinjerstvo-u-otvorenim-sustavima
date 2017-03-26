@@ -10,7 +10,7 @@ class Event extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
-    protected $fillable = ['title', 'short_description', 'long_description','photo','user_id'];
+    protected $fillable = ['title', 'short_description', 'long_description','photo','user_id','date_and_time_end','date_and_time_start'];
 
     public function interested()
     {

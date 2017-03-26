@@ -48,6 +48,8 @@ class EventController extends Controller
                 'short_description' => $request['short_description'],
                 'long_description' => $request['long_description'],
                 'user_id' => $userId,
+                'date_and_time_start' => $request['date_and_time_start'],
+                'date_and_time_end' => $request['date_and_time_end'],
             ]);
             if ($event->save()) {
                 //if event is created find that event and attach photo with name in format "id-yyyy-mm-dd.jpg" and return JSON object from thah function
