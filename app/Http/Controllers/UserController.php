@@ -56,7 +56,6 @@ class UserController extends Controller
                     'password' => bcrypt($request['password']),
                     'role' => 'User'
                 ]);
-                dd($user);
                 if ($user->save()) {                
                     return $user;
                 }
