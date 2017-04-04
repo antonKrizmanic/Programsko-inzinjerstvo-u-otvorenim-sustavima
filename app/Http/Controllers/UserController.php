@@ -19,7 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = DB::table('users')->select('id','name', 'email as user_email')->get();
+        $users = User::all();
         return $users;
     }
 
@@ -56,7 +56,7 @@ class UserController extends Controller
                     'password' => bcrypt($request['password']),
                 ]);
                 if ($user->save()) {                
-                    return $this->message("success","Ok");
+                    return $user;
                 }
                 else{
                     return $this->message("failed","something went wrong");
