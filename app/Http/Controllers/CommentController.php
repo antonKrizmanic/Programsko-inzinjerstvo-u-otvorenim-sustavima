@@ -21,9 +21,11 @@ class CommentController extends Controller
     public function store(Request $request){
         try{
             $event = Event::find($request['event_id']);
-            $user = User::find($request['user_id']);
+            //$user = User::where('email','=',$request['email']);
+            $user_id = User::getId($request['email']);
+            //$user = User::find($request['user_id']);
             $comment = Comment::create([
-                'user_id' => $user->id,
+                'user_id' => $user_id,
                 'event_id' => $event->id,
                 'comment' => $request['comment']
             ]);
