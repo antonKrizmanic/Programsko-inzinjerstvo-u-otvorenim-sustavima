@@ -31,7 +31,9 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::find($id);
-        $event['user_mail'] = User::getEmail($event['user_id']);
+        $user = User::find($event['user_id']);
+        $event['user_mail'] = User::getEmail($user->id);
+        $event['user_name'] = $user->name;
         return $event;
     }
 
