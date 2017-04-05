@@ -66,7 +66,7 @@ class EventController extends Controller
     {
         try{
             $event = Event::find($id);
-            $userId = User::getId($request['email']);
+            $userId = User::getId($request['user_email']);
             if($event->user_id != $userId){
                 return $this->message("failed", "You can not edit this event");
             }
