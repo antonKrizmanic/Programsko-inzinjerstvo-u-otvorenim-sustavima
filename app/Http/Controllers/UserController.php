@@ -41,8 +41,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validated=$this->validateUser($request); 
-        
+        $validated=$this->validateUser($request);
+
         if($validated != 1){
             return $validated;
         }
@@ -56,7 +56,7 @@ class UserController extends Controller
                     'password' => bcrypt($request['password']),
                     'role' => 'User'
                 ]);
-                if ($user->save()) {                
+                if ($user->save()) {
                     return $user;
                 }
                 else{
@@ -66,7 +66,7 @@ class UserController extends Controller
             else{
                 return $this->message("failed","this email is already in use");
             }
-        }       
+        }
     }
 
     public function login(Request $request){
@@ -78,49 +78,15 @@ class UserController extends Controller
                 return $user;
             }
             /*wrong password*/
-            else{                
+            else{
                 return $this->message("failed","invalid user credentials");
             }
         }
         /*wrong mail*/
-        else{            
+        else{
             return $this->message("failed","invalid user credentials");
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    }    
 
     /**
      * Remove the specified resource from storage.
@@ -128,21 +94,23 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($email)
     {
+        $id = User::getId($email);
         $numberOfDelete=User::destroy($id);
-        if($numberOfDelete==1){            
+        if($numberOfDelete==1){
             return $this->message("success","Ok");
         }
-        else{            
+        else{
             return $this->message("failed","something went wrong");
         }
     }
 
-    public function promote($id)
+    public function promote($email)
     {
-        $user = User::find($id);
+        $user = User::where('email','=',$email)->first();
         $user->role="Admin";
+        //dd($user);
         if($user->save()){
             return $this->message("Success","Ok");
         }
@@ -150,18 +118,18 @@ class UserController extends Controller
             return $this->message("Failed","Something went wrong");
         }
     }
-    
+
     public function validateUser($request){
         $validator = Validator::make($request->all(), [
-            'email' => 'required|max:60',        
+            'email' => 'required|max:60',
         ]);
         if ($validator->fails()) {
             return $this->message("failed","email is required");
         }
 
-        $validator = Validator::make($request->all(), [        
-            'name' => 'required',        
-        ]);        
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+        ]);
         if ($validator->fails()) {
             return $this->message("failed","name is required");
         }
@@ -173,9 +141,9 @@ class UserController extends Controller
         if ($validator->fails()) {
             return $this->message("failed","password is required");
         }
-        
+
         return 1;
-        
+
 
     }
 }

@@ -13,7 +13,7 @@ class GradeController extends Controller
     {
         try{
             $event = Event::find($request['event_id']);
-            $user = User::find($request['user_id']);
+            $user = User::where('email','=',$request['email'])->first();
 
             if($event != null && $user != null){
                 $checkGrade = Grade::where([
@@ -33,9 +33,9 @@ class GradeController extends Controller
                     $event->save();
                     return $this->message('success','Ok');
                 }
-                return $this->message('fail','vec ocjenio');
+                return $this->message('fail','You allready give this event grade');
             }
-            return $this->message('fail','ne postoji korisnik ili event');
+            return $this->message('fail','Somethnig went wrong');
         }
         catch(\Exception $e){
             return $this->message('fail','Something went wrong');

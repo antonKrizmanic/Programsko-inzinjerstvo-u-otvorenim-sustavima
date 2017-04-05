@@ -64,7 +64,7 @@ class EventController extends Controller
     {
         try{
             $event = Event::find($id);
-            $userId = User::getId($request['user_email']);
+            $userId = User::getId($request['email']);
             if($event->user_id != $userId){
                 return $this->message("failed", "You can not edit this event");
             }
@@ -90,10 +90,10 @@ class EventController extends Controller
 
     }
 
-    public function destroy($id, $userMail)
+    public function destroy($id, $email)
     {
         try{
-            $userId = User::getId($userMail);
+            $userId = User::getId($email);
             $event = Event::find($id);
             if($event->user_id == $userId){
                 $numberOfDelete=Event::destroy($id);

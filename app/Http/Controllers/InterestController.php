@@ -10,7 +10,7 @@ class InterestController extends Controller
     public function interested(Request $request)
     {
         try{
-            $user = User::find($request['user_id']);
+            $user = User::where('email','=',$request['email'])->first();
             $user->interests()->attach($request['event_id']);
             return $this->message('success','Ok');
         }
@@ -23,7 +23,7 @@ class InterestController extends Controller
 
     public function uninterested(Request $request)
     {
-        $user = User::find($request['user_id']);
+        $user = User::where('email','=',$request['email'])->first();
         $user->interests()->detach($request['event_id']);
 
         return $this->message('success','Ok');
