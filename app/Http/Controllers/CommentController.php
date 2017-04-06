@@ -13,7 +13,7 @@ class CommentController extends Controller
     {
         $comments = Comment::where('event_id','=',$eventId)->get();
         foreach($comments as $comment){
-            $comment->user_name = User::find($comment->user_id)->name;
+            $comment->name = User::find($comment->user_id)->name;
         }
         return $comments;
     }

@@ -25,7 +25,7 @@ Route::post('user/interested','InterestController@interested');
 Route::post('user/uninterested','InterestController@uninterested');
 
 Route::get('events','EventController@index');
-Route::get('event/{id}','EventController@show');
+Route::get('event/{id}/{email}','EventController@show');
 Route::post('event','EventController@store');
 Route::post('event/{id}','EventController@update');
 Route::delete('event/{id}/{email}','EventController@destroy');

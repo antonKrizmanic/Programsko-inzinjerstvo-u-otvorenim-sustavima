@@ -22,18 +22,26 @@ class EventController extends Controller
                                     ->get();
 
         foreach ($events as $event) {
-            $event->user_email = User::getEmail($event->user_id);
+            $event->email = User::getEmail($event->user_id);
         }
 
         return $events;
     }
 
-    public function show($id)
+    public function show($id, $email)
     {
         $event = Event::find($id);
-        $user = User::find($event['user_id']);
-        $event['user_mail'] = User::getEmail($user->id);
-        $event['user_name'] = $user->name;
+        $creator = User::find($event['user_id']);
+        $user = User::where('email','=',$email)->first();
+        $event->interested = false;
+        foreach($user->interests as $interest){
+          if($interest->id == $id){
+            $event->interested = true;
+          }
+        }
+
+        $event['email'] = User::getEmail($creator->id);
+        $event['name'] = $creator->name;
         return $event;
     }
 
@@ -44,7 +52,7 @@ class EventController extends Controller
         if ($validated != 1) {
             return $validated;
         } else {
-            $userId = User::getId($request['user_email']);
+            $userId = User::getId($request['email']);
             $event = Event::create([
                 'title' => $request['title'],
                 'short_description' => $request['short_description'],
@@ -66,7 +74,7 @@ class EventController extends Controller
     {
         try{
             $event = Event::find($id);
-            $userId = User::getId($request['user_email']);
+            $userId = User::getId($request['email']);
             if($event->user_id != $userId){
                 return $this->message("failed", "You can not edit this event");
             }
