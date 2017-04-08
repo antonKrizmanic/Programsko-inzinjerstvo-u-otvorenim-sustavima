@@ -130,8 +130,7 @@ class EventController extends Controller
         $event = Event::find($id);
         if ($request->hasFile('photo')) {
             $filename = $request->file('photo')->store('/event','s3');
-            $path = Storage::cloud()->url($filename);
-            dd($path);
+            $path = Storage::cloud()->url($filename);            
         }
         else if($event->photo != ""){
             $path = $event->photo;
