@@ -51,8 +51,7 @@ class EventController extends Controller
 
         if ($validated != 1) {
             return $validated;
-        } else {
-            dd($request['title']);
+        } else {            
             $userId = User::getId($request['email']);
             $event = Event::create([
                 'title' => $request['title'],
