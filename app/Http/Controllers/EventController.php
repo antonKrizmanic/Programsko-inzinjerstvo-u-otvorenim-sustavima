@@ -52,6 +52,7 @@ class EventController extends Controller
         if ($validated != 1) {
             return $validated;
         } else {
+          dd($request);
             $userId = User::getId($request['email']);
             $event = Event::create([
                 'title' => $request['title'],
@@ -130,7 +131,7 @@ class EventController extends Controller
         $event = Event::find($id);
         if ($request->hasFile('photo')) {
             $filename = $request->file('photo')->store('/event','s3');
-            $path = Storage::cloud()->url($filename);            
+            $path = Storage::cloud()->url($filename);
         }
         else if($event->photo != ""){
             $path = $event->photo;
