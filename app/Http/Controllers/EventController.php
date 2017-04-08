@@ -132,6 +132,9 @@ class EventController extends Controller
             $filename = $request->file('photo')->store('/event','s3');
             $path = Storage::cloud()->url($filename);
         }
+        else if($request['photo'] != null || $request['photo'] != ""){
+          $path = "Nesto";
+        }
         else if($event->photo != ""){
             $path = $event->photo;
         }
