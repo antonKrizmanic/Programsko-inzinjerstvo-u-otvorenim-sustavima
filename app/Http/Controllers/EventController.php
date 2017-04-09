@@ -141,7 +141,7 @@ class EventController extends Controller
 
     }
 
-    public function storePhoto($id, $request)
+    private function storePhoto($id, $request)
     {
         $event = Event::find($id);
         if ($request->hasFile('photo')) {
@@ -162,7 +162,7 @@ class EventController extends Controller
         }
     }
 
-    public function validateEvent($request)
+    private function validateEvent($request)
     {
         $validator = Validator::make($request->all(), [
             'short_description' => 'max:140',

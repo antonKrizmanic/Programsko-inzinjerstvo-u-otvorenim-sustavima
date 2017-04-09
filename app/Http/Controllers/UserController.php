@@ -22,17 +22,6 @@ class UserController extends Controller
         $users = User::all();
         return $users;
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -119,7 +108,7 @@ class UserController extends Controller
         }
     }
 
-    public function validateUser($request){
+    private function validateUser($request){
         $validator = Validator::make($request->all(), [
             'email' => 'required|max:60',
         ]);
