@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Response;
 use App\User;
 use App\Event;
+use App\Grade;
 use File;
 use Validator;
 use Carbon\Carbon;
@@ -122,6 +123,21 @@ class EventController extends Controller
             return $this->message("failed","Something went wrong");
         }
 
+
+    }
+
+    public static function updateGrade($id)
+    {
+        try{
+            $avg_grade = Grade::where('event_id','=',$id)->avg('grade');
+            $event = Event::find($id);
+            $event->grade = $avg_grade;
+            $event->save();
+            return true;
+        }
+        catch(\Exception $ex){
+            return false;
+        }
 
     }
 

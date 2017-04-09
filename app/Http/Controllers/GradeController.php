@@ -28,9 +28,7 @@ class GradeController extends Controller
                         'grade' =>$request['grade']
                     ]);
 
-                    $avg_grade = Grade::where('event_id','=',$event->id)->avg('grade');
-                    $event->grade = $avg_grade;
-                    $event->save();
+                    EventController::updateGrade($event->id);
                     return $this->message('success','Ok');
                 }
                 return $this->message('fail','You allready give this event grade');
