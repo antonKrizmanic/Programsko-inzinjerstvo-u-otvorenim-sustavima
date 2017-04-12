@@ -18,21 +18,19 @@ class EventController extends Controller
 {
     public function index()
     {
-//        $events = DB::table('events')->select('id', 'title', 'short_description', 'photo', 'user_id')
-//                                    ->where('deleted_at','=',null)
-//                                    ->get();
         $events = Event::where('deleted_at','=',null)
                         ->with('comments')
                         ->select('id','title','short_description','photo','user_id')->get();
 
-        for($i = 0; $i<count($events); $i++){
-            $events[$i]->email = User::getEmail($events[$i]->user_id);
-            $events[$i]->komentari = $events[$i]->comments()->count();
-        }
-//        foreach ($events as $event) {
-//            $event->email = User::getEmail($event->user_id);
-//            $event->comments = $event->comments()->count();
+//        for($i = 0; $i<count($events); $i++){
+//            $events[$i]->email = User::getEmail($events[$i]->user_id);
+//            $events[$i]->komentari = $events[$i]->comments()->count();
 //        }
+        foreach ($events as $event) {
+            $event->email = User::getEmail($event->user_id);
+            $event->komentari = $event->comments()->count();
+            $event->comments = null;
+        }
 
         return $events;
     }
