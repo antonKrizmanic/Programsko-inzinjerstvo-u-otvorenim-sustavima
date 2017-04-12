@@ -75,8 +75,8 @@ class EventController extends Controller
     {
         try{
             $event = Event::find($id);
-            $userId = User::getId($request['email']);
-            if($event->user_id != $userId){
+            $user = User::where('email','=',$request['email'])->first();
+            if($event->user_id != $user->id || $user->role == "Admin"){
                 return $this->message("failed", "You can not edit this event");
             }
             $validated = $this->validateEvent($request);
@@ -104,9 +104,9 @@ class EventController extends Controller
     public function destroy($id, $email)
     {
         try{
-            $userId = User::getId($email);
+            $user = User::where('email','=',$email)->first();
             $event = Event::find($id);
-            if($event->user_id == $userId){
+            if($event->user_id == $user->id || $user->role == "Admin"){
                 $numberOfDelete=Event::destroy($id);
                 if($numberOfDelete==1){
                     return $this->message("success","Ok");
