@@ -76,24 +76,24 @@ class EventController extends Controller
         try{
             $event = Event::find($id);
             $user = User::where('email','=',$request['email'])->first();
-            if($event->user_id != $user->id || $user->role == "Admin"){
-                return $this->message("failed", "You can not edit this event");
-            }
-            $validated = $this->validateEvent($request);
+            if($event->user_id == $user->id || $user->role == "Admin"){
+                $validated = $this->validateEvent($request);
 
-            if ($validated != 1) {
-                return $validated;
-            } else {
-                $event->title = $request['title'];
-                $event->short_description = $request['short_description'];
-                $event->long_description = $request['long_description'];
-
-                if ($event->save()) {
-                    return $this->storePhoto($event->id, $request);
+                if ($validated != 1) {
+                    return $validated;
                 } else {
-                    return $this->message("failed", "something went wrong");
+                    $event->title = $request['title'];
+                    $event->short_description = $request['short_description'];
+                    $event->long_description = $request['long_description'];
+
+                    if ($event->save()) {
+                        return $this->storePhoto($event->id, $request);
+                    } else {
+                        return $this->message("failed", "something went wrong");
+                    }
                 }
             }
+            return $this->message("failed", "You can not edit this event");
         }
         catch(\Exception $e){
             return $this->message("failed", "something went wrong");
