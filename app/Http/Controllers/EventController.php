@@ -27,7 +27,7 @@ class EventController extends Controller
 
         for($i = 0; $i<count($events); $i++){
             $events[$i]->email = User::getEmail($events[$i]->user_id);
-            $events[$i]->comments = $events[$i]->comments()->count();
+            $events[$i]->komentari = $events[$i]->comments()->count();
         }
 //        foreach ($events as $event) {
 //            $event->email = User::getEmail($event->user_id);
