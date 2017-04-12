@@ -25,10 +25,14 @@ class EventController extends Controller
                         ->with('comments')
                         ->select('id','title','short_description','photo','user_id')->get();
 
-        foreach ($events as $event) {
-            $event->email = User::getEmail($event->user_id);
-            $event->comments = $event->comments()->count();
+        for($i = 0; $i<count($events); $i++){
+            $events[$i]->email = User::getEmail($events[$i]->user_id);
+            $events[$i]->comments = $events[$i]->comments()->count();
         }
+//        foreach ($events as $event) {
+//            $event->email = User::getEmail($event->user_id);
+//            $event->comments = $event->comments()->count();
+//        }
 
         return $events;
     }
